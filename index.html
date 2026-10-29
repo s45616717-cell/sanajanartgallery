@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100f0d">
+<title>Sanajan Art Studio | Art Gallery</title>
+
+<style>
+:root {
+  --bg: #100f0d;
+  --panel: #1b1915;
+  --gold: #d9b45b;
+  --gold-light: #f2d991;
+  --text: #f8f3e9;
+  --muted: #b9b1a1;
+  --line: #3b3427;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #fff0b7;
+  outline-offset: 3px;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #100f0def;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav {
+  max-width: 1160px;
+  margin: auto;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.logo {
+  font: 700 1.35rem Georgia, serif;
+}
+
+.logo span { color: var(--gold); }
+
+.nav-links {
+  display: flex;
+  gap: 1.3rem;
+  color: var(--muted);
+}
+
+.nav-links a:hover { color: var(--gold-light); }
+
+.menu-button {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--gold-light);
+  border-radius: 9px;
+  padding: .5rem .8rem;
+}
+
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--gold);
+  color: #17130a;
+  font-weight: 750;
+  padding: .8rem 1.2rem;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  transition: .2s;
+}
+
+.button:hover {
+  background: var(--gold-light);
+  transform: translateY(-1px);
+}
+
+.button-outline {
+  background: transparent;
+  color: var(--gold-light);
+}
+
+.hero {
+  max-width: 1160px;
+  margin: auto;
+  padding: 5rem 1.2rem;
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+h1, h2, h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  line-height: 1.12;
+  margin: .6rem 0 1rem;
+}
+
+h1 {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  letter-spacing: -.045em;
+}
+
+h1 em {
+  font-weight: 400;
+  color: var(--gold);
+}
+
+h2 { font-size: clamp(2rem, 4vw, 3.1rem); }
+h3 { font-size: 1.3rem; }
+
+.lead {
+  color: var(--muted);
+  font-size: 1.08rem;
+  max-width: 580px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .8rem;
+  margin-top: 1.7rem;
+}
+
+.hero-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 420px;
+}
+
+.hero-visual:before {
+  content: "";
+  position: absolute;
+  width: 82%;
+  aspect-ratio: 1;
+  border: 1px solid #8a6a2d;
+  border-radius: 50%;
+  opacity: .55;
+}
+
+.hero-visual img {
+  position: relative;
+  width: min(84%, 420px);
+  height: 430px;
+  object-fit: cover;
+  border: 9px solid #292319;
+  box-shadow: 0 25px 65px #0009;
+  transform: rotate(2deg);
+}
+
+.hero-label {
+  position: absolute;
+  left: 0;
+  bottom: 18px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: .85rem 1rem;
+  max-width: 220px;
+}
+
+.section { padding: 4.3rem 1.2rem; }
+.section-alt { background: #171511; }
+.container { max-width: 1160px; margin: auto; }
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-heading p {
+  max-width: 520px;
+  color: var(--muted);
+}
+
+.filters {
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+  margin: 1.4rem 0 1.6rem;
+}
+
+.filter {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  padding: .55rem 1rem;
+}
+
+.filter:hover,
+.filter.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #17130a;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+
+.art-card {
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  transition: transform .2s, border-color .2s;
+}
+
+.art-card:hover {
+  transform: translateY(-4px);
+  border-color: #8a6a2d;
+}
+
+.art-image-button {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: #201d17;
+  overflow: hidden;
+}
+
+.art-image-button img {
+  display: block;
+  width: 100%;
+  height: 290px;
+  object-fit: cover;
+  transition: transform .35s;
+}
+
+.art-image-button:hover img { transform: scale(1.05); }
+
+.zoom-label {
+  position: absolute;
+  right: .7rem;
+  bottom: .7rem;
+  border-radius: 999px;
+  padding: .35rem .65rem;
+  background: #100f0de8;
+  color: white;
+  font-size: .8rem;
+}
+
+.art-details { padding: 1rem; }
+
+.art-details h3 { margin: .1rem 0 .4rem; }
+
+.art-details p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.art-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-top: .75rem;
+  color: var(--gold-light);
+  font-size: .82rem;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.about-card {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 1.5rem;
+  border-radius: 16px;
+}
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 2rem 1.2rem;
+  color: var(--muted);
+}
+
+.footer-inner {
+  max-width: 1160px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: #000e;
+}
+
+.modal.open { display: flex; }
+
+.modal-inner {
+  position: relative;
+  max-width: min(1000px, 95vw);
+  max-height: 92vh;
+  text-align: center;
+}
+
+.modal-inner img {
+  display: block;
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border: 6px solid #292319;
+}
+
+.modal-caption {
+  padding: .65rem;
+  color: var(--text);
+}
+
+.close-modal {
+  position: absolute;
+  top: -.8rem;
+  right: -.8rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: var(--gold);
+  color: #17130a;
+  font-size: 1.4rem;
+}
+
+.art-card[hidden] { display: none; }
+
+@media (max-width: 800px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    padding-top: 3.5rem;
+  }
+
+  .hero-visual { min-height: 350px; }
+  .hero-visual img { height: 350px; }
+
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-grid { grid-template-columns: 1fr; }
+  .section { padding: 3.5rem 1rem; }
+}
+
+@media (max-width: 560px) {
+  .menu-button { display: block; }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: .9rem;
+    padding: 1rem 1.2rem;
+    background: #15130f;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-links.open { display: flex; }
+  .nav > .button { display: none; }
+
+  .hero {
+    padding-top: 2.7rem;
+    padding-bottom: 3rem;
+  }
+
+  h1 { font-size: 3.1rem; }
+  .hero-visual { min-height: 300px; }
+  .hero-visual img { height: 300px; width: 82%; }
+  .section-heading { display: block; }
+  .gallery { gap: .65rem; }
+  .art-image-button img { height: 190px; }
+  .art-details { padding: .7rem; }
+  .art-details h3 { font-size: 1.05rem; }
+  .art-meta { flex-direction: column; gap: .15rem; }
+  .logo { font-size: 1.2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *:before, *:after { transition: none !important; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="nav">
+    <a class="logo" href="#home">Sanajan <span>Art</span> Studio</a>
+
+    <button class="menu-button" id="menuButton"
+      aria-expanded="false" aria-controls="navLinks">
+      ☰ Menu
+    </button>
+
+    <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+      <a href="#gallery">Gallery</a>
+      <a href="#collections">Collections</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <a class="button" href="#gallery">Explore artwork ↗</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="home">
+    <div>
+      <div class="eyebrow">A world of color and feeling</div>
+
+      <h1>Art that tells<br>your <em>story.</em></h1>
+
+      <p class="lead">
+        Welcome to Sanajan Art Studio — a gallery of expressive paintings,
+        thoughtful compositions, and visual inspiration.
+        Discover artwork that speaks to you.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button" href="#gallery">View the gallery</a>
+        <a class="button button-outline" href="#about">Our inspiration</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <img
+        src="image.jpg"
+        alt="Fine art painting displayed in a gallery">
+
+      <div class="hero-label">
+        <span class="eyebrow">Featured mood</span><br>
+        <strong>Every brushstroke has a sanajan story.</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- ART GALLERY -->
+  <section class="section section-alt" id="gallery">
+    <div class="container">
+
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">Selected works</div>
+          <h2>Explore the gallery</h2>
+        </div>
+
+        <p>
+          Browse the collection by style. Select any image to zoom in
+          and enjoy a larger view of the artwork.
+        </p>
+      </div>
+
+      <!-- GALLERY FILTERS -->
+      <div class="filters" role="group" aria-label="Filter gallery">
+        <button class="filter active" data-filter="all"
+          aria-pressed="true">All artwork</button>
+
+        <button class="filter" data-filter="painting"
+          aria-pressed="false">Paintings</button>
+
+        <button class="filter" data-filter="abstract"
+          aria-pressed="false">Abstract</button>
+
+        <button class="filter" data-filter="nature"
+          aria-pressed="false">Nature</button>
+
+        <button class="filter" data-filter="portrait"
+          aria-pressed="false">Portraits & fine art</button>
+      </div>
+
+      <!-- PHOTO CARDS -->
+      <div class="gallery" id="galleryGrid">
+
+        <article class="art-card" data-category="painting nature">
+          <button class="art-image-button zoomable"
+            data-title="Golden Hour"
+            data-full="photo 1.jpg"
+            aria-label="Zoom artwork: Golden Hour">
+
+            <img
+              src="photo 1.jpg"
+              alt="Warm golden light over a landscape"
+              loading="lazy">
+
+            <span class="zoom-label">⌕ Zoom</span>
+          </button>
+
+          <div class="art-details">
+            <h3>Golden Hour</h3>
+            <p>Landscape · Nature study</p>
+            <div class="art-meta">
+              <span>Warm tones</span>
+              <span>01 / 06</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="art-card" data-category="painting abstract">
+          <button class="art-image-button zoomable"
+            data-title="Color in Motion"
+            data-full="photo 2.jpg"
+            aria-label="Zoom artwork: Color in Motion">
+
+            <img
+              src="photo 2.jpg"
+              alt="Vibrant abstract painting"
+              loading="lazy">
+
+            <span class="zoom-label">⌕ Zoom</span>
+          </button>
+
+          <div class="art-details">
+            <h3>Color in Motion</h3>
+            <p>Abstract · Expressive</p>
+            <div class="art-meta">
+              <span>Bold color</span>
+              <span>02 / 06</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="art-card" data-category="painting portrait">
+          <button class="art-image-button zoomable"
+            data-title="Quiet Expression"
+            data-full="photo 3.jpg"
+            aria-label="Zoom artwork: Quiet Expression">
+
+            <img
+              src="photo 3.jpg"
+              alt="Classic framed painting in an art gallery"
+              loading="lazy">
+
+            <span class="zoom-label">⌕ Zoom</span>
+          </button>
+
+          <div class="art-details">
+            <h3>Quiet Expression</h3>
+            <p>Fine art · Classic mood</p>
+            <div class="art-meta">
+              <span>Timeless</span>
+              <span>03 / 06</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="art-card" data-category="painting nature">
+          <button class="art-image-button zoomable"
+            data-title="Still Waters"
+            data-full="photo 4.jpg"
+            aria-label="Zoom artwork: Still Waters">
+
+            <img
+              src="photo 4.jpg"
+              alt="Mountain landscape reflected in still water"
+              loading="lazy">
+
+            <span class="zoom-label">⌕ Zoom</span>
+          </button>
+
+          <div class="art-details">
+            <h3>Still Waters</h3>
+            <p>Landscape · Nature study</p>
+            <div class="art-meta">
+              <span>Peaceful</span>
+              <span>04 / 06</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="art-card" data-category="abstract">
+          <button class="art-image-button zoomable"
+            data-title="Golden Rhythm"
+            data-full="photo 5.jpg"
+            aria-label="Zoom artwork: Golden Rhythm">
+
+            <img
+              src="photo 5.jpg"
+              alt="Modern abstract artwork with layered colors"
+              loading="lazy">
+
+            <span class="zoom-label">⌕ Zoom</span>
+          </button>
+
+          <div class="art-details">
+            <h3>Golden Rhythm</h3>
+            <p>Abstract · Modern forms</p>
+            <div class="art-meta">
+              <span>Contemporary</span>
+              <span>05 / 06</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="art-card" data-category="painting nature">
+          <button class="art-image-button zoomable"
+            data-title="Open Horizons"
+            data-full="photo 6.jpg"
+            aria-label="Zoom artwork: Open Horizons">
+
+            <img
+              src="photo 6.jpg"
+              alt="Open green landscape beneath a wide sky"
+              loading="lazy">
+
+            <span class="zoom-label">⌕ Zoom</span>
+          </button>
+
+          <div class="art-details">
+            <h3>Open Horizons</h3>
+            <p>Landscape · Nature study</p>
+            <div class="art-meta">
+              <span>Open air</span>
+              <span>06 / 06</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTIONS -->
+  <section class="section" id="collections">
+    <div class="container">
+
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">Find your style</div>
+          <h2>Art for every mood</h2>
+        </div>
+
+        <p>
+          From calm landscapes to bold abstract works,
+          explore different kinds of visual expression.
+        </p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="eyebrow">01 · Nature</div>
+          <h3>Peaceful landscapes</h3>
+          <p class="lead">
+            Natural colors, open horizons, and quiet scenes
+            inspired by the world around us.
+          </p>
+          <button class="button button-outline collection-link"
+            data-filter="nature">Explore nature</button>
+        </div>
+
+        <div class="about-card">
+          <div class="eyebrow">02 · Abstract</div>
+          <h3>Color without limits</h3>
+          <p class="lead">
+            Shapes, textures, and colors that leave space
+            for your own interpretation.
+          </p>
+          <button class="button button-outline collection-link"
+            data-filter="abstract">Explore abstract</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section section-alt" id="about">
+    <div class="container about-grid">
+
+      <div>
+        <div class="eyebrow">About the studio</div>
+        <h2>A little space for a lot of imagination.</h2>
+      </div>
+
+      <div>
+        <p class="lead">
+          sanajan Art Studio celebrates the beauty of painting
+          and the stories art can tell. Discover styles,
+          find inspiration, and appreciate every detail.
+        </p>
+
+        <p style="color:var(--muted)">
+          Replace the sample images with your own artwork
+          by changing the image links in this HTML file.
+        </p>
+
+        <a class="button" href="#gallery">Back to the gallery ↑</a>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a class="logo" href="#home">Sanajan <span>Art</span> Studio</a>
+    <span>Made with creativity and a little gold ✦</span>
+    <span>© <span id="year"></span> Sanajan Art Studio</span>
+  </div>
+</footer>
+
+<!-- IMAGE ZOOM WINDOW -->
+<div class="modal" id="imageModal"
+  role="dialog" aria-modal="true" aria-label="Zoomed artwork viewer">
+
+  <div class="modal-inner">
+    <button class="close-modal" id="closeModal"
+      aria-label="Close zoomed image">×</button>
+
+    <img id="modalImage" src="" alt="">
+    <div class="modal-caption" id="modalCaption"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = (selector, root = document) =>
+    root.querySelector(selector);
+
+  const $$ = (selector, root = document) =>
+    [...root.querySelectorAll(selector)];
+
+  // Display current year
+  $("#year").textContent = new Date().getFullYear();
+
+  // Mobile navigation
+  const menuButton = $("#menuButton");
+  const navLinks = $("#navLinks");
+
+  menuButton.addEventListener("click", () => {
+    const open = navLinks.classList.toggle("open");
+    menuButton.setAttribute("aria-expanded", String(open));
+  });
+
+  $$("#navLinks a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      menuButton.setAttribute("aria-expanded", "false");
+    });
+  });
+
+  // Filter artwork by category
+  function setFilter(filter) {
+    $$(".filter").forEach(button => {
+      const active = button.dataset.filter === filter;
+
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+
+    $$(".art-card").forEach(card => {
+      const categories = card.dataset.category.split(" ");
+      card.hidden =
+        filter !== "all" && !categories.includes(filter);
+    });
+
+    $("#gallery").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+
+  $$(".filter").forEach(button => {
+    button.addEventListener("click", () => {
+      setFilter(button.dataset.filter);
+    });
+  });
+
+  $$(".collection-link").forEach(button => {
+    button.addEventListener("click", () => {
+      setFilter(button.dataset.filter);
+    });
+  });
+
+  // Open large image
+  const modal = $("#imageModal");
+  const modalImage = $("#modalImage");
+  const modalCaption = $("#modalCaption");
+  let previousFocus = null;
+
+  function openModal(button) {
+    const thumbnail = $("img", button);
+
+    previousFocus = document.activeElement;
+    modalImage.src = button.dataset.full;
+    modalImage.alt = thumbnail.alt;
+    modalCaption.textContent =
+      button.dataset.title || thumbnail.alt;
+
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+    $("#closeModal").focus();
+  }
+
+  // Close large image
+  function closeModal() {
+    modal.classList.remove("open");
+    modalImage.src = "";
+    document.body.style.overflow = "";
+
+    if (previousFocus) {
+      previousFocus.focus();
+    }
+  }
+
+  $$(".zoomable").forEach(button => {
+    button.addEventListener("click", () => {
+      openModal(button);
+    });
+  });
+
+  $("#closeModal").addEventListener("click", closeModal);
+
+  modal.addEventListener("click", event => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener("keydown", event => {
+    if (
+      event.key === "Escape" &&
+      modal.classList.contains("open")
+    ) {
+      closeModal();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
